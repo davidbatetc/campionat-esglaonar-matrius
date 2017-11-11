@@ -36,7 +36,7 @@ namespace console {
         // Make sure to add your name if you were part of it as well!
         cout << "This program has been developed by David Batet." << endl;
         cout << "Please report any bugs found to him." << endl;
-        cout << "Source code available at https://github.com/DavidBatet" << endl;
+        cout << "Source code available at https://github.com/DavidBatet/campionat-esglaonar-matrius" << endl;
         cout << endl;
 
         wait();
