@@ -1,5 +1,5 @@
-#ifndef RATIONAL_HPP
-#define RATIONAL_HPP
+#ifndef __RATIONAL_HPP__
+#define __RATIONAL_HPP__
 
 #include <iostream>
 #include <string>
@@ -23,10 +23,9 @@ public:
     friend rational operator+(const rational& rat1, const rational& rat2);
     friend rational operator-(const rational& rat);
     friend rational operator*(const rational& rat1, const rational& rat2);
-    friend rational operator/(const long long& z, const rational& rat);
     friend rational operator/(const rational& rat1, const rational& rat2);
     friend bool operator==(const rational& rat1, const rational& rat2);
     friend bool operator!=(const rational& rat1, const rational& rat2);
 };
 
-#endif //RATIONAL_HPP
+#endif  // __RATIONAL_HPP__

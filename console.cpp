@@ -6,17 +6,22 @@ namespace console {
     const int MAX_ROWS_ALLOWED = 15;
     const int MIN_COLS_ALLOWED = 1;
     const int MAX_COLS_ALLOWED = 15;
-    const int HEADER_BAR_LENGTH = 24;  // Length of the bar of the submenus
+    const int HEADER_BAR_LENGTH = 28;  // Length of the bar of the submenus
 
     // Outputs blank lines to clear the screen
     void clear() {
         for(int i = 0; i < CLEAR_SCREEN_LINES; i++) cout << endl;
     }
 
+    void cleanIstream(istream& is) {
+        is.clear();
+        is.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
     // Waits for the user to press enter
     void wait() {
         cout << endl << "Press ENTER";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cleanIstream(cin);
         string waitingString;
         getline(cin, waitingString);
         if (cin.eof()) exit(0);
@@ -61,8 +66,7 @@ namespace console {
         cin >> n;
         if (cin.eof()) exit(0);
         else if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cleanIstream(cin);
             return false;
         }
         else if (n < min or n > max) return false;
@@ -75,8 +79,7 @@ namespace console {
         cin >> s;
         if (cin.eof()) exit(0);
         else if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cleanIstream(cin);
             return false;
         }
 
@@ -91,20 +94,18 @@ namespace console {
         cin >> fileName;
         if (cin.eof()) exit(0);
         else if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cleanIstream(cin);
             return false;
         }
 
         if (not endsWithMT(fileName)) return false;
 
-        ifstream in(fileName);
-        if (in.is_open()) {
+        ifstream is(fileName);
+        if (is.is_open()) {
             int n;
-            in >> n;
-            if (in.fail()) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            is >> n;
+            if (is.fail()) {
+                cleanIstream(is);
                 cout << "\"" << fileName << "\"" << " is empty or invalid." << endl;
                 return false;
             }
@@ -121,17 +122,16 @@ namespace console {
         cin >> fileName;
         if (cin.eof()) exit(0);
         else if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cleanIstream(cin);
             return false;
         }
 
         if (not endsWithMT(fileName)) return false;
 
-        ifstream in(fileName);
-        if (in.is_open()) {
+        ifstream is(fileName);
+        if (is.is_open()) {
             string s;
-            if (in >> s) {
+            if (is >> s) {
                 cout <<  "The file \"" << fileName << "\" already exists. Do"
                     " you want to overwrite it? (y/n): ";
                 while (not getInput(s)) {
@@ -147,8 +147,8 @@ namespace console {
             else return true;
         }
 
-        ofstream out(fileName);
-        if(out.is_open()) return true;
+        ofstream os(fileName);
+        if(os.is_open()) return true;
         return false;
     }
 
@@ -162,7 +162,8 @@ namespace console {
             cout << "Name of the file with the matrix: ";
         }
 
-        mat = matrix(fileName);
+        ifstream is(fileName);
+        mat = matrix(is, fileName);
         if(mat.getColSize() != 0) return true;
         return false;
     }
@@ -181,12 +182,12 @@ namespace console {
             cout << "Name of the output file: ";
             while (not getFileForOutput(fileName)) {
                 cout << "Couldn't create or overwrite \"" << fileName << "\". Please try again." << endl << endl;
-                cout << "Name of the output: ";
+                cout << "Name of the output file: ";
             }
 
-            ofstream out(fileName);
-            out << mat.getColSize() << " " << mat.getRowSize() << endl << endl;
-            out << mat << endl;
+            ofstream os(fileName);
+            os << mat.getColSize() << " " << mat.getRowSize() << endl << endl;
+            os << mat << endl;
             cout << "Matrix successfully saved in \"" << fileName << "\"." << endl;
         }
     }
@@ -197,11 +198,12 @@ namespace console {
         cout << "       MAIN MENU       " << endl;
         cout << "═══════════════════════" << endl;
         cout << endl;
-        cout << "1. Generate Matrix" << endl;
-        cout << "2. Reduce Matrix" << endl;
-        cout << "3. Compare Matrices" << endl;
-        cout << "4. Display Matrix" << endl;
-        cout << "5. Exit" << endl;
+        cout << "1. Generate matrix" << endl;
+        cout << "2. Input matrix to file" << endl;
+        cout << "3. Reduce matrix" << endl;
+        cout << "4. Compare matrices" << endl;
+        cout << "5. Display matrix" << endl;
+        cout << "6. Exit" << endl;
         cout << endl;
         cout << "───────────────────────" << endl;
         cout << "Option: ";
@@ -229,22 +231,23 @@ namespace console {
         int option;
 
         displayMenu();
-        while(not getInput(option, 1, 5)) {
+        while(not getInput(option, 1, 6)) {
             clear();
             displayMenu();
         }
 
         if (option == 1) genMatrix();
-        else if (option == 2) reduceMatrix();
-        else if (option == 3) compMatrices();
-        else if (option == 4) displayMatrix();
-        else if (option == 5) exit(0);
+        else if (option == 2) inputMatrixToFile();
+        else if (option == 3) reduceMatrix();
+        else if (option == 4) compMatrices();
+        else if (option == 5) displayMatrix();
+        else if (option == 6) exit(0);
     }
 
     // Generates a random matrix and saves it the user wants to
     void genMatrix() {
         int m, n;
-        displayHeader("Generate Matrix");
+        displayHeader("Generate matrix");
 
         cout << "Number of rows = ";
         while (not getInput(m, MIN_ROWS_ALLOWED, MAX_ROWS_ALLOWED)) {
@@ -271,10 +274,26 @@ namespace console {
         clear();
     }
 
+    void inputMatrixToFile() {
+        displayHeader("Input matrix to file");
+
+        cout << "Input the matrix in the correct format: " << endl << endl;
+        matrix mat(cin);
+        if (mat.getColSize() == 0) cleanIstream(cin);
+        else {
+            cout << endl;
+            cout << mat << endl;
+            saveMatrixInFile(mat);
+        }
+
+        wait();
+        clear();
+    }
+
     // Computes the reduced row echelon form of a matrix and
     // saves it if the user wants to
     void reduceMatrix() {
-        displayHeader("Reduce Matrix");
+        displayHeader("Reduce matrix");
 
         matrix mat;
         getMatrixFromInput(mat);
@@ -293,7 +312,7 @@ namespace console {
 
     // Compares the reduced echelon form of two matrices from files
     void compMatrices() {
-        displayHeader("Compare Matrices");
+        displayHeader("Compare matrices");
 
         matrix mat1, mat2;
         getMatrixFromInput(mat1);
@@ -328,7 +347,7 @@ namespace console {
 
     // Displays the matrix in a file
     void displayMatrix() {
-        displayHeader("Display Matrix");
+        displayHeader("Display matrix");
 
         matrix mat;
         getMatrixFromInput(mat);

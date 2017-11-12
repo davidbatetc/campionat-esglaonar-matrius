@@ -22,46 +22,62 @@ matrix::matrix(int m, int n) : m(m), n(n) {
     cout << m << " x " << n << " matrix successfully generated." << endl;
 }
 
-// Constructs matrix from file
-// Pre: file exists and can be accessed
-matrix::matrix(const string& fileName) {
-    ifstream in(fileName);
-    if (not (in >> m >> n)) {
-        cout << "Couldn't read matrix from \"" << fileName << "\"." << endl;
-        m = 0;
-        n = 0;
-        return;
+// Constructs matrix from input stream
+matrix::matrix(istream &is, const string& fileName) {
+    int times = 1;
+    while (times <= 2) {
+        if (times == 1) is >> m;
+        else is >> n;
+
+        if (is.eof()) {
+            if (fileName == "terminal") exit(0);
+            cout << "Unexpected end of input while reading matrix from \""
+                << fileName << "\"." << endl;
+
+            m = 0;
+            n = 0;
+            return;
+        }
+
+        else if (is.fail()) {
+            cout << "Couldn't read matrix from \"" << fileName << "\"." << endl;
+
+            m = 0;
+            n = 0;
+            return;
+        }
+
+        times++;
     }
 
     rational r;
     for (int i = 0; i < m; i++) {
         row s;
         for (int j = 0; j < n; j++) {
-            in >> r;
-            if (in.eof()) {
-                in.clear();
-                in.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "Unexpected end of file while reading matrix in \""
+            is >> r;
+            if (is.eof()) {
+                cout << "Unexpected end of input while reading matrix from \""
                     << fileName << "\"." << endl;
 
-                M = vector<row>();
-                m = 0;
-                n = 0;
-                return;
-            }
-            else if (in.fail()) {
-                in.clear();
-                in.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "The matrix in \"" << fileName
-                    << "\" is invalid. Please check the format of the input." << endl;
+                if (fileName == "terminal") exit(0);
 
                 M = vector<row>();
                 m = 0;
                 n = 0;
+
                 return;
             }
+
+            else if (is.fail()) {
+                M = vector<row>();
+                m = 0;
+                n = 0;
+                return;
+            }
+
             s.append(r);
         }
+        
         M.push_back(s);
     }
 }
@@ -81,7 +97,7 @@ void matrix::reduce() {
     int pRP = 0;  // pivotRowPosition
     for (int k = 0; k < n; k++) {
         int j = pRP - 1;
-        while (++j < m and M[j][k] == rational(0));
+        while (++j < m and M[j][k] == 0);
         if (j < m) {
             swap(M[pRP], M[j]);
             M[pRP] = M[pRP]/M[pRP][k];

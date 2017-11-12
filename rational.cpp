@@ -37,7 +37,8 @@ rational rational::reduce() {
 
 istream& operator>>(istream& is, rational& rat) {
     string s;
-    if (is >> s) {
+    is >> s;
+    if (not is.eof()) {
         size_t pos = s.find("/");
 
         if(pos == string::npos) {
@@ -61,11 +62,14 @@ istream& operator>>(istream& is, rational& rat) {
 
             catch (...) {
                 cout << "\"" << s << "\" is not a valid rational number." << endl;
-                is.setstate(std::ios_base::failbit);
+                is.setstate(ios_base::failbit);
             }
 
             rat.reduce();
         }
+    }
+    else {
+        is.setstate(ios_base::eofbit);
     }
 
     return is;
@@ -92,10 +96,6 @@ rational operator-(const rational& rat) {
 
 rational operator*(const rational& rat1, const rational& rat2) {
     return rational(rat1.num*rat2.num, rat1.den*rat2.den);
-}
-
-rational operator/(const long long& z, const rational& rat) {
-    return rational(rational(z)/rat);
 }
 
 rational operator/(const rational& rat1, const rational& rat2) {

@@ -1,5 +1,5 @@
-#ifndef CONSOLE_HPP
-#define CONSOLE_HPP
+#ifndef __CONSOLE_HPP__
+#define __CONSOLE_HPP__
 
 #include <limits>
 
@@ -7,6 +7,7 @@
 
 namespace console {
     void clear();
+    void cleanIstream(istream& is);
     void wait();
     bool endsWithMT(const string& fileName);
     bool getInput(int& n, int min, int max);
@@ -19,9 +20,10 @@ namespace console {
     void displayMenu();
     void menu();
     void genMatrix();
+    void inputMatrixToFile();
     void reduceMatrix();
     void compMatrices();
     void displayMatrix();
 }
 
-#endif // CONSOLE_HPP
+#endif  // __CONSOLE_HPP__

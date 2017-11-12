@@ -1,5 +1,5 @@
-#ifndef MATRIX_HPP
-#define MATRIX_HPP
+#ifndef __MATRIX_HPP__
+#define __MATRIX_HPP__
 
 #include <fstream>
 #include <cctype>
@@ -15,7 +15,7 @@ private:
 public:
     matrix();
     matrix(int m, int n);
-    matrix(const string& fileName);
+    matrix(istream& is, const string& fileName = "terminal");
     int getColSize() const;
     int getRowSize() const;
     void reduce();
@@ -25,4 +25,4 @@ public:
     friend bool operator==(const matrix& mat1, const matrix& mat2);
 };
 
-#endif //MATRIX_HPP
+#endif  // __MATRIX_HPP__

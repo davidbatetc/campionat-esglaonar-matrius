@@ -13,10 +13,8 @@ private:
 
 public:
     row();
-    row(int n);
     row(int n, rational rat);
     int getPivotPos();
-    void append(int m);
     void append(rational rat);
     rational operator[](int i) const;
     rational& operator[](int i);

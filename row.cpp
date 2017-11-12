@@ -1,22 +1,13 @@
 #include "row.hpp"
 
 // Default constructor
-row::row() : row(0) {}
-
-// Constructs row with all of its elements set to 0
-row::row(int n) : row(n, rational(0, 1)) {}
+row::row() : row(0, 0) {}
 
 // Explicit constructor
 row::row(int n, rational r) : n(n), pivot(0) {
     for (int i = 0; i < n; i++) {
         R.push_back(r);
     }
-}
-
-// Adds integer to the end of the row
-void row::append(int m) {
-    R.push_back(rational(m, 1));
-    n++;
 }
 
 // Adds rational to the end of the row
@@ -29,7 +20,7 @@ void row::append(rational rat) {
 // Increments the value of the variable pivot
 int row::getPivotPos() {
     while(pivot < n) {
-        if (R[pivot] != rational(0)) return pivot;
+        if (R[pivot] != 0) return pivot;
         pivot++;
     }
     return -1;

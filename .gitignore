@@ -1,2 +1,5 @@
 # Ignore file 'program'
 program
+
+# Ignore files ending with '*.mt'
+*.mt

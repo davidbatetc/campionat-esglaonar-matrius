@@ -2,5 +2,6 @@
 all: main.cpp rational.cpp row.cpp matrix.cpp
 	g++ main.cpp rational.cpp row.cpp matrix.cpp console.cpp -o program -Wall -std=c++11
 
-clean: 
+clean:
 	$(RM) program
+	$(RM) *.mt
