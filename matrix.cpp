@@ -95,25 +95,44 @@ int matrix::getRowSize() const {
 // Computes reduced row echelon form
 void matrix::reduce() {
     int pRP = 0;  // pivotRowPosition
+    
     for (int k = 0; k < n; k++) {
-        int j = pRP - 1;
-        while (++j < m and M[j][k] == 0);
+        //Set j in initial position after pivot
+        int j = pRP + 1; 
+        
+        //If j element is not a zero, go down until its found
+        while (j < m and M[j][k] == rational(0)) j++;
+        
         if (j < m) {
+        	//Permute rows of pivot and j
             swap(M[pRP], M[j]);
-            M[pRP] = M[pRP]/M[pRP][k];
+            //Get a 1 at the left-most position of row
+            M[pRP] = M[pRP]/M[pRP][k]; 
+            
+            //Iterate in all the rows below the pivot row
             for (int i = pRP + 1; i < m; i++) {
+            	//Substract the new pivot row in the rows below
                 M[i] = M[i] + (-M[i][k])*M[pRP];
             }
+            
+            //Set the pivot row the next one
             pRP++;
         }
     }
-
+	
+	//Now that we have 1s at the left-most position of each row,
+	//we can go upward erasing all numbers above the ones
+	//Example of row: 0 0 0 1 2 384/17 12 9 -12 -2
     for (int k = m - 1; k >= 0; k--) {
+        //Get the position of the pivot
         int pos = M[k].getPivotPos();
+        
         for (int i = 0; i < k; i++) {
+        	//Change all the numbers above the ones to zeros
             M[i] = M[i] + (-M[i][pos])*M[k];
         }
     }
+    
 }
 
 row matrix::operator[](int i) const {
