@@ -9,8 +9,8 @@
 
 class matrix {
 private:
-    vector<row> M;
-    int m, n;
+    vector<row> M_;
+    int numberOfRows_, numberOfColumns_;
 
 public:
     matrix();
