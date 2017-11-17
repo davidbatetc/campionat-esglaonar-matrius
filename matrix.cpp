@@ -7,43 +7,43 @@
 const int MAX_INT_ABS_VAL = 9;
 
 // Default constructor
-matrix::matrix() : m(0), n(0) {}
+matrix::matrix() : numberOfRows_(0), numberOfColumns_(0) {}
 
 // Constructs matrix with random elements
-matrix::matrix(int m, int n) : m(m), n(n) {
+matrix::matrix(int numberOfRows, int numberOfColumns) : numberOfRows_(numberOfRows), numberOfColumns_(numberOfColumns) {
     srand(time(0));
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < numberOfRows_; i++) {
         row r;
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < numberOfColumns_; j++) {
             r.append(rand() % (MAX_INT_ABS_VAL*2 + 1) - MAX_INT_ABS_VAL);
         }
-        M.push_back(r);
+        M_.push_back(r);
     }
-    cout << m << " x " << n << " matrix successfully generated." << endl;
+    cout << numberOfRows_ << " x " << numberOfColumns_ << " matrix successfully generated." << endl;
 }
 
 // Constructs matrix from input stream
 matrix::matrix(istream &is, const string& fileName) {
     int times = 1;
     while (times <= 2) {
-        if (times == 1) is >> m;
-        else is >> n;
+        if (times == 1) is >> numberOfRows_;
+        else is >> numberOfColumns_;
 
         if (is.eof()) {
             if (fileName == "terminal") exit(0);
             cout << "Unexpected end of input while reading matrix from \""
                 << fileName << "\"." << endl;
 
-            m = 0;
-            n = 0;
+            numberOfRows_ = 0;
+            numberOfColumns_ = 0;
             return;
         }
 
         else if (is.fail()) {
             cout << "Couldn't read matrix from \"" << fileName << "\"." << endl;
 
-            m = 0;
-            n = 0;
+            numberOfRows_ = 0;
+            numberOfColumns_ = 0;
             return;
         }
 
@@ -51,9 +51,9 @@ matrix::matrix(istream &is, const string& fileName) {
     }
 
     rational r;
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < numberOfRows_; i++) {
         row s;
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < numberOfColumns_; j++) {
             is >> r;
             if (is.eof()) {
                 cout << "Unexpected end of input while reading matrix from \""
@@ -61,79 +61,79 @@ matrix::matrix(istream &is, const string& fileName) {
 
                 if (fileName == "terminal") exit(0);
 
-                M = vector<row>();
-                m = 0;
-                n = 0;
+                M_ = vector<row>();
+                numberOfRows_ = 0;
+                numberOfColumns_ = 0;
 
                 return;
             }
 
             else if (is.fail()) {
-                M = vector<row>();
-                m = 0;
-                n = 0;
+                M_ = vector<row>();
+                numberOfRows_ = 0;
+                numberOfColumns_ = 0;
                 return;
             }
 
             s.append(r);
         }
         
-        M.push_back(s);
+        M_.push_back(s);
     }
 }
 
 // Returns the size of the columns
 int matrix::getColSize() const {
-    return m;
+    return numberOfRows_;
 }
 
 // Returs the size of the rows
 int matrix::getRowSize() const {
-    return n;
+    return numberOfColumns_;
 }
 
 // Computes reduced row echelon form
 void matrix::reduce() {
     int pRP = 0;  // pivotRowPosition
-    for (int k = 0; k < n; k++) {
+    for (int k = 0; k < numberOfColumns_; k++) {
         int j = pRP - 1;
-        while (++j < m and M[j][k] == 0);
-        if (j < m) {
-            swap(M[pRP], M[j]);
-            M[pRP] = M[pRP]/M[pRP][k];
-            for (int i = pRP + 1; i < m; i++) {
-                M[i] = M[i] + (-M[i][k])*M[pRP];
+        while (++j < numberOfRows_ and M_[j][k] == 0);
+        if (j < numberOfRows_) {
+            swap(M_[pRP], M_[j]);
+            M_[pRP] = M_[pRP]/M_[pRP][k];
+            for (int i = pRP + 1; i < numberOfRows_; i++) {
+                M_[i] = M_[i] + (-M_[i][k])*M_[pRP];
             }
             pRP++;
         }
     }
 
-    for (int k = m - 1; k >= 0; k--) {
-        int pos = M[k].getPivotPos();
+    for (int k = numberOfRows_ - 1; k >= 0; k--) {
+        int pos = M_[k].getPivotPos();
         for (int i = 0; i < k; i++) {
-            M[i] = M[i] + (-M[i][pos])*M[k];
+            M_[i] = M_[i] + (-M_[i][pos])*M_[k];
         }
     }
 }
 
 row matrix::operator[](int i) const {
-    return M[i];
+    return M_[i];
 }
 
 row& matrix::operator[](int i) {
-    return M[i];
+    return M_[i];
 }
 
 ostream& operator<<(ostream& os, const matrix& mat) {
-    for (int i = 0; i < mat.m; i++) {
+    for (int i = 0; i < mat.numberOfRows_; i++) {
         os << mat[i] << endl;
     }
     return os;
 }
 
 bool operator==(const matrix& mat1, const matrix& mat2) {
-    if (mat1.m != mat2.m) return false;
-    for (int i = 0; i < mat1.m; i++) {
+    if (mat1.numberOfRows_ != mat2.numberOfRows_) return false;
+    for (int i = 0; i < mat1.numberOfRows_; i++) {
         if (mat1[i] != mat2[i]) return false;
     }
     return true;
