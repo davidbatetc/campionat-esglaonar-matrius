@@ -199,11 +199,12 @@ namespace console {
         cout << "═══════════════════════" << endl;
         cout << endl;
         cout << "1. Generate matrix" << endl;
-        cout << "2. Input matrix to file" << endl;
-        cout << "3. Reduce matrix" << endl;
-        cout << "4. Compare matrices" << endl;
-        cout << "5. Display matrix" << endl;
-        cout << "6. Exit" << endl;
+        cout << "2. Generate matrix with integer solutions" << endl;
+        cout << "3. Input matrix to file" << endl;
+        cout << "4. Reduce matrix" << endl;
+        cout << "5. Compare matrices" << endl;
+        cout << "6. Display matrix" << endl;
+        cout << "7. Exit" << endl;        
         cout << endl;
         cout << "───────────────────────" << endl;
         cout << "Option: ";
@@ -231,19 +232,56 @@ namespace console {
         int option;
 
         displayMenu();
-        while(not getInput(option, 1, 6)) {
+        while(not getInput(option, 1, 7)) {
             clear();
             displayMenu();
         }
 
         if (option == 1) genMatrix();
-        else if (option == 2) inputMatrixToFile();
-        else if (option == 3) reduceMatrix();
-        else if (option == 4) compMatrices();
-        else if (option == 5) displayMatrix();
-        else if (option == 6) exit(0);
+        else if (option == 2) genIntMatrix();
+        else if (option == 3) inputMatrixToFile();
+        else if (option == 4) reduceMatrix();
+        else if (option == 5) compMatrices();
+        else if (option == 6) displayMatrix();
+        else if (option == 7) exit(0);
     }
 
+    // Generates a random matrix with integer solutions and saves it the user wants to
+    void genIntMatrix() {
+        int m, n, z;
+        displayHeader("Generate matrix");
+
+        cout << "Number of rows = ";
+        while (not getInput(m, MIN_ROWS_ALLOWED, MAX_ROWS_ALLOWED)) {
+            cout << "Invalid input. Please try again." << endl << endl;
+            cout << "Number of rows = ";
+        }
+
+        cout << "Number of columns " << "(min. " << m + 1 << ") = ";
+        while (not getInput(n, m + 1, MAX_ROWS_ALLOWED)) {
+            cout << "Invalid input. Please try again." << endl << endl;
+            cout << "Number of columns " << "(min. " << m + 1 << ") = ";
+        }
+
+        cout << "Number of zeros " << "(max. " << m*(m + 1)/2 - 1 << ") = ";
+        while (not getInput(z, 0, m*(m + 1)/2 - 1)) {
+            cout << "Invalid input. Please try again." << endl << endl;
+            cout << "Number of zeros " << "(max. " << m*(m + 1)/2 - 1 << ") = ";
+        }
+
+        cout << endl;
+        matrix mat(m, n, z);
+
+        cout << endl;
+        cout << "Matrix:" << endl;
+        cout << mat << endl;
+
+        saveMatrixInFile(mat);
+
+        wait();
+        clear();
+    }
+	
     // Generates a random matrix and saves it the user wants to
     void genMatrix() {
         int m, n;
@@ -273,7 +311,7 @@ namespace console {
         wait();
         clear();
     }
-
+    
     void inputMatrixToFile() {
         displayHeader("Input matrix to file");
 

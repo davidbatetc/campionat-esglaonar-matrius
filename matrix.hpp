@@ -11,10 +11,12 @@ class matrix {
 private:
     vector<row> M_;
     int numberOfRows_, numberOfColumns_;
+    bool linear_comb(vector<row>& mat, const vector<row>& sol, int x, int y, rational n);
 
 public:
     matrix();
     matrix(int m, int n);
+    matrix(int m, int n, int z);
     matrix(istream& is, const string& fileName = "terminal");
     int getColSize() const;
     int getRowSize() const;

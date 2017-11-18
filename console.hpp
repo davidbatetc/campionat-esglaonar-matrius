@@ -20,6 +20,7 @@ namespace console {
     void displayMenu();
     void menu();
     void genMatrix();
+    void genIntMatrix();
     void inputMatrixToFile();
     void reduceMatrix();
     void compMatrices();
