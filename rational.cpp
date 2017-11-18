@@ -110,3 +110,13 @@ bool operator==(const rational &rat1, const rational &rat2) {
 bool operator!=(const rational &rat1, const rational &rat2) {
     return not (rat1 == rat2);
 }
+
+bool operator>(const rational &rat1, const rational &rat2) {
+    if(rat1.num*rat2.den > rat1.den*rat2.num) return true;
+    return false;
+}
+
+bool operator<(const rational &rat1, const rational &rat2) {
+    if(rat1.num*rat2.den < rat1.den*rat2.num) return true;
+    return false;
+}
