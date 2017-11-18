@@ -26,6 +26,8 @@ public:
     friend rational operator/(const rational& rat1, const rational& rat2);
     friend bool operator==(const rational& rat1, const rational& rat2);
     friend bool operator!=(const rational& rat1, const rational& rat2);
+    friend bool operator>(const rational& rat1, const rational& rat2);
+    friend bool operator<(const rational& rat1, const rational& rat2);
 };
 
 #endif  // __RATIONAL_HPP__
