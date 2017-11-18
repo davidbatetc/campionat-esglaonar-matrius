@@ -10,7 +10,7 @@ namespace console {
 
     // Outputs blank lines to clear the screen
     void clear() {
-        for(int i = 0; i < CLEAR_SCREEN_LINES; i++) cout << endl;
+        for (int i = 0; i < CLEAR_SCREEN_LINES; ++i) cout << endl;
     }
 
     void cleanIstream(istream& is) {
@@ -148,7 +148,7 @@ namespace console {
         }
 
         ofstream os(fileName);
-        if(os.is_open()) return true;
+        if (os.is_open()) return true;
         return false;
     }
 
@@ -164,7 +164,7 @@ namespace console {
 
         ifstream is(fileName);
         mat = matrix(is, fileName);
-        if(mat.getColSize() != 0) return true;
+        if (mat.getColSize() != 0) return true;
         return false;
     }
 
@@ -217,13 +217,13 @@ namespace console {
         int space = (HEADER_BAR_LENGTH - len)/2;
         if (space < 3) space = 3;
 
-        for (int i = 0; i < HEADER_BAR_LENGTH; i++) cout << "═";
+        for (int i = 0; i < HEADER_BAR_LENGTH; ++i) cout << "═";
         cout << endl;
-        for (int i = 0; i < space; i++) cout << ' ';
+        for (int i = 0; i < space; ++i) cout << ' ';
         cout << header;
-        for (int i = 0; i < space; i++) cout << ' ';
+        for (int i = 0; i < space; ++i) cout << ' ';
         cout << endl;
-        for (int i = 0; i < HEADER_BAR_LENGTH; i++) cout << "═";
+        for (int i = 0; i < HEADER_BAR_LENGTH; ++i) cout << "═";
         cout << endl;
     }
 
@@ -232,7 +232,7 @@ namespace console {
         int option;
 
         displayMenu();
-        while(not getInput(option, 1, 7)) {
+        while (not getInput(option, 1, 7)) {
             clear();
             displayMenu();
         }
