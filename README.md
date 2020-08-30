@@ -7,7 +7,7 @@
 Type the following commands in Terminal:
 
 ```bash
-git clone https://github.com/DavidBatet/campionat-esglaonar-matrius
+git clone https://github.com/davidbatetc/campionat-esglaonar-matrius
 cd campionat-esglaonar-matrius
 make all
 ./program
@@ -15,7 +15,7 @@ make all
 
 ### Windows
 
-* Download https://github.com/DavidBatet/campionat-esglaonar-matrius as a ZIP file.
+* Download https://github.com/davidbatetc/campionat-esglaonar-matrius as a ZIP file.
 * Extract the ZIP file to a new folder, for example, "campionat-esglaonar-matrius".
 * Open your preferred IDE.
 * Create a new C++ project.
